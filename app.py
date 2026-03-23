@@ -14,6 +14,23 @@ st.set_page_config(
     layout="wide",
 )
 
+# ── Password gate ─────────────────────────────────────────────────────────────
+def check_password():
+    if st.session_state.get("authenticated"):
+        return True
+    st.title("🔍 SEO Keyword Research Tool")
+    password = st.text_input("Enter password to access", type="password")
+    if st.button("Login"):
+        if password == st.secrets.get("APP_PASSWORD", ""):
+            st.session_state["authenticated"] = True
+            st.rerun()
+        else:
+            st.error("Incorrect password.")
+    return False
+
+if not check_password():
+    st.stop()
+
 st.title("🔍 SEO Keyword Research Tool")
 st.caption("Generate related keywords from Claude, ChatGPT, and Google — merged into one table with search volumes.")
 
