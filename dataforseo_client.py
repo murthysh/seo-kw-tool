@@ -58,7 +58,7 @@ def get_google_keywords(
     return [
         {
             "keyword": item["keyword"],
-            "search_volume": (item.get("keyword_info") or {}).get("search_volume"),
+            "search_volume": item.get("search_volume"),
         }
         for item in results
     ]
@@ -98,6 +98,6 @@ def get_search_volumes(
         results = _parse_task_result(resp.json())
         for item in results:
             kw = item["keyword"].lower()
-            volume_map[kw] = (item.get("keyword_info") or {}).get("search_volume")
+            volume_map[kw] = item.get("search_volume")
 
     return volume_map
