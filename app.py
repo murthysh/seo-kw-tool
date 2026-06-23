@@ -21,7 +21,7 @@ def check_password():
     st.title("🔍 SEO Keyword Research Tool")
     password = st.text_input("Enter password to access", type="password")
     if st.button("Login"):
-        if password == st.secrets.get("APP_PASSWORD", ""):
+        if password == st.secrets.get("APP_PASSWORD", os.environ.get("APP_PASSWORD", "")):
             st.session_state["authenticated"] = True
             st.rerun()
         else:
@@ -39,14 +39,17 @@ with st.sidebar:
     st.header("⚙️ API Credentials")
     st.caption("Credentials are never stored — entered per session only.")
 
+    def _secret(key):
+        return st.secrets.get(key, os.environ.get(key, ""))
+
     anthropic_key = st.text_input("Anthropic API Key", type="password",
-                                   value=os.environ.get("ANTHROPIC_API_KEY", ""))
+                                   value=_secret("ANTHROPIC_API_KEY"))
     openai_key = st.text_input("OpenAI API Key", type="password",
-                                value=os.environ.get("OPENAI_API_KEY", ""))
+                                value=_secret("OPENAI_API_KEY"))
     dfs_login = st.text_input("DataForSEO Login (email)",
-                               value=os.environ.get("DATAFORSEO_LOGIN", ""))
+                               value=_secret("DATAFORSEO_LOGIN"))
     dfs_password = st.text_input("DataForSEO Password", type="password",
-                                  value=os.environ.get("DATAFORSEO_PASSWORD", ""))
+                                  value=_secret("DATAFORSEO_PASSWORD"))
 
     st.divider()
     st.header("🌍 Settings")
